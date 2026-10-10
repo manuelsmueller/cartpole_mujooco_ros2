@@ -1,0 +1,13 @@
+# Primitiv-Modell: Cart 1.0 kg, Pole 0.1 kg, L = 1.0 m
+# Werte aus LQR-Herleitung und empirischer Nachjustierung (Gazebo-Projekt)
+cartpole_pid_controller:
+  ros__parameters:
+    kp: 77.3
+    ki: 0.0
+    kd: 20.6
+    i_clamp: 10.0
+    kp_cart: -6.3
+    ki_cart: -2.5
+    kd_cart: -10.3
+    i_clamp_cart: 3.0
+    effort_limit: 60.0

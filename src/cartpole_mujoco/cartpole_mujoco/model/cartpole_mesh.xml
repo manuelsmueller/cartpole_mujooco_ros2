@@ -1,0 +1,52 @@
+<mujoco model="cartpole_mesh">
+  <compiler angle="radian" meshdir="meshes"/>
+  <option timestep="0.01" gravity="0 0 -9.81"/>
+
+  <!-- STL-Dateien sind in mm modelliert; scale 0.01 entspricht dem 10x-vergroesserten Modell
+       (Original-Skalierung 0.001 waere zu klein/schnell fuer die Simulation). -->
+  <asset>
+    <mesh name="rail_mesh" file="CartPole-Rail.stl" scale="0.01 0.01 0.01"/>
+    <mesh name="cart_mesh" file="CartPole-cart.stl" scale="0.01 0.01 0.01"/>
+    <mesh name="pole_mesh" file="CartPole-pole.stl" scale="0.01 0.01 0.01"/>
+  </asset>
+
+  <!-- MuJoCo nutzt fuer Mesh-Kollisionen die konvexe Huelle; die Nut-Feder-Fuehrung
+       zwischen Rail und Cart wuerde dadurch aufgefuellt. Die Fuehrung uebernimmt das Gelenk. -->
+  <contact>
+    <exclude body1="rail" body2="cart"/>
+    <exclude body1="cart" body2="pole"/>
+  </contact>
+
+  <worldbody>
+    <light diffuse="0.6 0.6 0.6" pos="0 0 3" dir="0 0 -1"/>
+    <geom type="plane" size="3 3 0.1" rgba="0.85 0.85 0.85 1"/>
+
+    <!-- Bekannte Randfaelle (bewusst akzeptiert): Rail liegt nur 5 cm ueber dem Boden und
+         Rail<->Pole ist nicht ausgeschlossen. Bei grosser Auslenkung kann der Pole daher
+         auf der Schiene bzw. dem Boden aufliegen. Der Regler verhindert das im Normalbetrieb. -->
+    <body name="rail" pos="0 0 0.05">
+      <geom type="mesh" mesh="rail_mesh" pos="-0.05 0 -0.03" rgba="0.6 0.6 0.6 1"/>
+      <inertial pos="0 0 -0.016021" mass="7.0432"
+                diaginertia="2.76550100 0.00411028 2.76374507"/>
+
+      <body name="cart" pos="0 0 0.03">
+        <joint name="slider_to_cart" type="slide" axis="0 1 0"
+               range="-0.85 0.85" damping="0.05"/>
+        <geom type="mesh" mesh="cart_mesh" pos="-0.05 -0.10 -0.064936" rgba="0.1 0.1 0.8 1"/>
+        <inertial pos="0 0 -0.00331" mass="1.870071"
+                  diaginertia="0.00721491 0.00333362 0.00745556"/>
+
+        <body name="pole" pos="0 0 0.064936">
+          <joint name="cart_to_pole" type="hinge" axis="1 0 0" damping="0.01"/>
+          <geom type="mesh" mesh="pole_mesh" pos="-0.05 -0.10 -0.10" rgba="0.8 0.1 0.1 1"/>
+          <inertial pos="0 0 0.357139" mass="1.337837"
+                    diaginertia="0.03763928 0.03763935 0.00077138"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="cart_motor" joint="slider_to_cart" ctrlrange="-50 50" gear="1"/>
+  </actuator>
+</mujoco>
