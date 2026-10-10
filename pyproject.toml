@@ -1,0 +1,17 @@
+[project]
+name = "cartpole-mujooco-ros2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Manuel Müller", email = "manuel-sebastian.mueller@web.de" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+cartpole-mujooco-ros2 = "cartpole_mujooco_ros2:main"
+
+[build-system]
+requires = ["uv_build>=0.12.8,<0.13.0"]
+build-backend = "uv_build"
