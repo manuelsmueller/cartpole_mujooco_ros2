@@ -306,4 +306,4 @@ The primitive gains started from an LQR design with an extra integral state on t
 
 ## License
 
-Apache-2.0, see [LICENSE](LICENSE).
+see [LICENSE](LICENSE).
